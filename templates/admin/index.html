@@ -1,0 +1,15 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+    {{ super() }}
+    {% if "superuser" in current_user.roles %}
+        <div class="container">
+            <div class="row">
+                <div class="col-10 offset-1">
+                    <p>
+                        <a class="btn btn-primary" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Back to website</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock body %}
