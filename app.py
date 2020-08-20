@@ -1,4 +1,6 @@
-from flask import Flask, redirect, url_for
+import logging
+
+from flask import Flask, redirect, url_for, request
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFError
 
@@ -7,9 +9,10 @@ from models import db, security, user_datastore
 from views import views
 from utils import list_obj_stringify
 from admin import admin
+from config import BaseConfig
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config.BaseConfig')
 db.init_app(app)
 security_state = security.init_app(app, user_datastore)
 security._state = security_state
@@ -38,6 +41,18 @@ def csrf_error(reason):
 
 #registering Jinja Filters
 app.jinja_env.filters['list_obj_stringify'] = list_obj_stringify
+
+# Logging section
+fileHandler = logging.FileHandler(BaseConfig.GLOBAL_LOG_FILE)
+fileHandler.setFormatter(
+    logging.Formatter("%(asctime)s: %(levelname)s: %(message)s")
+)
+app.logger.propagate = False
+app.logger.setLevel(logging.DEBUG)
+app.logger.addHandler(fileHandler)
+@app.before_request
+def logg_request():
+    app.logger.debug('%s - %s' % (request.remote_addr, request.url))
 
 if __name__ == "__main__":
     app.run(debug=True)

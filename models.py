@@ -44,6 +44,10 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.email
 
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(80), nullable=False, unique=True)
+
 class ApiItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(80), nullable=False)
@@ -54,10 +58,6 @@ class ApiItem(db.Model):
         'Tag', secondary=api_item_tag_table, lazy=True,
         backref=db.backref('api_items', lazy=True)
     )
-
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(80), nullable=False, unique=True)
 
 class Endpoint(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,4 +1,4 @@
-import json, re
+import json, re, string, random
 from urllib.parse import urlencode
 from urllib import request
 
@@ -50,3 +50,9 @@ def from_sql_to_dict(obj):
     return {
         col.name: getattr(obj, col.name) for col in obj.__table__.columns
     }
+
+def generate_random_string(length=None):
+    if not length: length=random.randint(4,10)
+    letters = string.ascii_lowercase
+    result = ''.join(random.choice(letters) for _ in range(length))
+    return result
