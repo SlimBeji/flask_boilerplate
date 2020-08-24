@@ -1,5 +1,6 @@
-from models import db, Tag, ApiItem, Endpoint, Field
 from sqlalchemy.exc import IntegrityError
+
+from models import db, Tag, ApiItem, Endpoint, Field
 
 class CRUD:
     @staticmethod

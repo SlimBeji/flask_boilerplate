@@ -1,0 +1,81 @@
+{% from "macros/navbar.html" import navbar with context %}
+{% from "macros/leftnav.html" import leftnav %}
+{% from "macros/flash_messages.html" import flash_messages with context %}
+{% from "macros/widgets.html" import widgets %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>My Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous"
+    >
+
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"
+        crossorigin="anonymous">
+    </script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous">
+    </script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous">
+    </script>
+
+    <style>
+        body{
+            font-size: 1rem;
+        }
+    </style>
+
+</head>
+
+<body>
+    {% block navbar %}
+        {{ navbar() }}
+    {% endblock %}
+
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-3 col-lg-2">
+                {% block leftnav %}
+                    {{ leftnav() }}
+                {% endblock leftnav %}
+            </div>
+
+            <div class="col-md-9 text-left">
+                {% block flash %}
+                    {{ flash_messages() }}
+                {% endblock %}
+
+                {% block content %}
+                    Slim
+                {% endblock %}
+            </div>
+
+            {% block widgets %}
+                {{ widgets() }}
+            {% endblock widgets %}
+        </div>
+    </div>
+
+</body>
+
+</html>

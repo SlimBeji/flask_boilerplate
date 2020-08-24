@@ -19,3 +19,7 @@ class BaseConfig:
     SECURITY_PASSWORD_SALT = "ATGUOHAELKiubahiughaerGOJAEGj"
     SECURITY_FLASH_MESSAGES = True
     SECURITY_REGISTERABLE = False
+
+class Globals:
+    ACCEPTED_FIELD_TYPES = ['date', 'datetime', 'string', 'integer', 'boolean']
+    ACCEPTED_FIELD_REQUIRED = ['yes', 'no']

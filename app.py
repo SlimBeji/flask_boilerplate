@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFError
 
 from extensions import csrf
 from models import db, security, user_datastore
+from api import api
 from views import views
 from utils import list_obj_stringify
 from admin import admin
@@ -26,6 +27,7 @@ to enable sqlite droping tables"""
 migrate = Migrate(app, db)
 
 #registering views and APIs
+api.init_app(app)
 app.register_blueprint(views)
 
 #Creating a 404 template
