@@ -1,0 +1,69 @@
+{% macro render_form(form, action_url='', action_text='Submit', data='', class_='', btn_class='btn btn-primary float-right') %}
+
+    <form method="POST" action="{{ action_url }}" role="form" class="{{ class_ }}">
+        {{ form.hidden_tag() if form.hidden_tag }}
+        {% if caller %}
+            {{ caller() }}
+        {% else %}
+            {% for f in form %}
+                {% if f.type == 'BooleanField' %}
+                    {{ render_checkbox_field(f) }}
+                {% elif f.type == 'RadioField' %}
+                    {{ render_radio_field(f) }}
+                {% elif f.type != 'CSRFTokenField' and f.type != 'HiddenField' %}
+                    {% if data[f.name] is iterable and data[f.name] is not string %}
+                        {% set value = data[f.name] | join(' ')  %}
+                    {% else %}
+                        {% set value = data[f.name] %}
+                    {% endif %}
+                    {% if f.type=='TextAreaField' or f.type=='SelectField'  %}
+                        {% set test = form[f.name].process_data(value) %}
+                        {{ render_field(f) }}
+                    {% else %}
+                        {{ render_field(f, value=value) }}
+                    {% endif %}
+
+        {% endif %}
+            {% endfor %}
+        {% endif %}
+        <button type="submit" class="{{ btn_class }}">{{ action_text }} </button>
+    </form>
+{% endmacro %}
+
+{% macro render_field(field, label_visible=true, value='') %}
+    <div class="form-group {{ 'has-error' if field.errors }} {{ kwargs.pop('class_', '') }}">
+        {% if field.type != 'CSRFTokenField' and label_visible %}
+            <label for="{{ field.id }}" class="mb-0 control-label">{{ field.label }}</label>
+        {% endif %}
+        {% if field.errors %}
+            <div class="text-danger ml-2">
+                <ul class="m-0">
+                    {% for e in field.errors %}
+                        <li><small>{{ e }}</small></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {{ field(value=value, class_='form-control', **kwargs) }}
+    </div>
+{% endmacro %}
+
+{% macro render_checkbox_field(field) -%}
+    <div class="checkbox">
+        <label>
+            {{ field(type='checkbox', **kwargs) }} {{ field.label }}
+        </label>
+    </div>
+{% endmacro %}
+
+{% macro render_radio_field(field) -%}
+    {% for value, label, _ in field.iter_choices() %}
+        <div class="radio">
+            <label>
+                <input type="radio" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}">{{ label }}
+            </label>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+

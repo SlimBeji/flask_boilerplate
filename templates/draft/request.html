@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="card mt-3 mb-3">
+        <div class="card-header bg-primary text-white">Description</div>
+        <div class="card-body">
+            <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">Vistit the url /city/your_city_name to get a nice weather report.</p>
+            <!--a href="#" class="btn btn-primary">Go somewhere</a-->
+        </div>
+    </div>
+
+    {% for key, item in data.items() %}
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">{{key}}</div>
+            <div class="card-body">
+                {% if item is mapping %}
+                    <table class="table">
+                        {% for subkey, subitem in item.items() %}
+                            <tr>
+                                <td scope="row">{{subkey}} :</td>
+                                <td scope="row">{{subitem}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+
+                {% elif item is string %}
+                    <span class="label label-default">{{item}}</span>
+                {% elif item is sequence %}
+
+
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                {% for subkey, subitem in item[0].items() %}
+                                    <th scope="cole">{{subkey}}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subitem in item %}
+                                <tr>
+                                    {% for subsubkey, subsubitem in subitem.items() %}
+                                        <td>{{subsubitem}}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                {% else %}
+                    <span class="label label-default">{{item}}</span>
+                {% endif %}
+
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

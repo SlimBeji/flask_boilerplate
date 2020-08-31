@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% from "/macros/render_form.html" import render_form %}
+
+{% block content %}
+    <h5 class="card-title mt-3">Add API</h5>
+	{{ render_form(form, action_url=url_for('views.add_endpoint'), action_text='Add Endpoint') }}
+{% endblock %}

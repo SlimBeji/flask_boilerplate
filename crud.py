@@ -1,5 +1,6 @@
 from sqlalchemy.exc import IntegrityError
 
+from config import Globals
 from models import db, Tag, ApiItem, Endpoint, Field
 
 class CRUD:
@@ -26,15 +27,16 @@ class CRUD:
     @staticmethod
     def addTags(tags, commit=False):
         metatags = []
-        for tag_text in tags:
+        tags_list = tags.strip().split()
+        for tag_text in tags_list:
             metatags.append(CRUD.addTag(tag_text, commit=commit))
 
         return metatags
 
     @staticmethod
-    def addApi(name, url, description='', tags=None, commit=False):
+    def addApi(label, url, description='', tags=None, commit=False):
         metatags = CRUD.addTags(tags, commit) if tags else []
-        api = ApiItem(label=name, url=url, description=description, tags=metatags)
+        api = ApiItem(label=label, url=url, description=description, tags=metatags)
         db.session.add(api)
         try:
             db.session.flush()
@@ -53,10 +55,11 @@ class CRUD:
         return api
 
     @staticmethod
-    def getApis(tags=None):
+    def getApis(tags=None, page=None):
         apis = []
         query = ApiItem.query
         if tags:
+            tags = tags.strip().split()
             tags = [t.lower() for t in tags]
             apis.extend(query.filter(ApiItem.label.ilike(' '.join(tags))).all())
             for tag_text in tags:
@@ -76,7 +79,11 @@ class CRUD:
 
             apis_relevance = sorted(apis_relevance, key=lambda x: -x['relevance'])
             sorted_apis = [a['api'] for a in apis_relevance]
-            return sorted_apis
+            return sorted_apis[:Globals.ITEM_PER_PAGE]
+
+        if page:
+            apis = query.paginate(page, Globals.ITEM_PER_PAGE).items
+            return apis
 
         apis = query.all()
         return apis
@@ -99,12 +106,12 @@ class CRUD:
         return code
 
     @staticmethod
-    def editApi(id, name=None, url=None, description=None, tags=None, commit=False):
+    def editApi(id, label=None, url=None, description=None, tags=None, commit=False):
         api = CRUD.getApi(id)
         if api:
             try:
                 code = api.id
-                if name is not None: api.label = name
+                if label is not None: api.label = label
                 if url is not None: api.url = url
                 if description is not None: api.description = description
                 if tags is not None: api.tags = CRUD.addTags(tags, commit)
@@ -121,10 +128,9 @@ class CRUD:
         return code
 
     @staticmethod
-    def addEndpoint(api_id, name, url, description='', tags=None, commit=False):
+    def addEndpoint(api_id, label, url, description='', tags=None, commit=False):
         metatags = CRUD.addTags(tags, commit) if tags else []
-        if not name: name = url
-        endpoint = Endpoint(api_item_id=api_id, label=name, url=url, description=description, tags=metatags)
+        endpoint = Endpoint(api_item_id=api_id, label=label, url=url, description=description, tags=metatags)
         db.session.add(endpoint)
         try:
             db.session.flush()
@@ -143,10 +149,11 @@ class CRUD:
         return endpoint
 
     @staticmethod
-    def getEndpoints(tags=None):
+    def getEndpoints(tags=None, page=None):
         endpoints = []
         query = Endpoint.query
         if tags:
+            tags = tags.strip().split()
             tags = [t.lower() for t in tags]
             endpoints.extend(query.filter(Endpoint.label.ilike(' '.join(tags))).all())
             for tag_text in tags:
@@ -167,6 +174,10 @@ class CRUD:
                 endpoints_relevance = sorted(endpoints_relevance, key=lambda x: -x['relevance'])
                 sorted_endpoints = [a['endpoint'] for a in endpoints_relevance]
                 return sorted_endpoints
+
+        if page:
+            endpoints = query.paginate(page, Globals.ITEM_PER_PAGE).items
+            return endpoints
 
         endpoints = query.all()
         return endpoints
@@ -189,12 +200,12 @@ class CRUD:
         return code
 
     @staticmethod
-    def editEndpoint(id, name=None, url=None, description=None, tags=None, commit=False):
+    def editEndpoint(id, label=None, url=None, description=None, tags=None, commit=False):
         endpoint = CRUD.getEndpoint(id)
         if endpoint:
             try:
                 code = endpoint.id
-                if name is not None: endpoint.label = name
+                if label is not None: endpoint.label = label
                 if url is not None: endpoint.url = url
                 if description is not None: endpoint.description = description
                 if tags is not None: endpoint.tags = CRUD.addTags(tags, commit)
@@ -221,9 +232,9 @@ class CRUD:
         return field
 
     @staticmethod
-    def addEndpointField(endpoint_id, name, type_field, description='', default='', required=False, commit=False):
+    def addEndpointField(endpoint_id, label, type_field, description='', default='', required=False, commit=False):
         field = Field(
-            endpoint_id=endpoint_id, name=name, type=type_field,
+            endpoint_id=endpoint_id, label=label, type=type_field,
             description=description, default=default, required=required
         )
         try:
@@ -239,13 +250,15 @@ class CRUD:
         return field.id
 
     @staticmethod
-    def editField(field_id, name=None, type_field=None, description=None, default=None, required=None, commit=False):
+    def editField(field_id, label=None, type_field=None, description=None, default=None, required=None, commit=False):
         field = CRUD.getField(field_id)
         if field:
             try:
                 code = field.id
-                if name is not None: field.name = name
-                if type_field is not None: field.type = type_field
+                if label is not None: field.label = label
+                if type_field is not None:
+                    if type_field != field.type: field.default = ''
+                    field.type = type_field
                 if description is not None: field.description = description
                 if default is not None: field.default = default
                 if required is not None: field.required = required

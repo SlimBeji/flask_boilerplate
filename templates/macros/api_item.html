@@ -1,0 +1,23 @@
+{% from "macros/api_buttons.html" import api_buttons %}
+
+{% macro api_item(api, edit_api_form, add_endpoint_form) %}
+
+<div class="card mb-2">
+    <div class="card-header">
+        {{api.label}}
+    </div>
+    <div class="card-body">
+        <div class="card-title d-inline">
+            <h6 class="d-inline mb-0" >{{api.url}} </h6>
+            {% for tag in api.tags %}
+                <span class="badge badge-primary d-inline ml-1">{{tag}} </span>
+            {% endfor %}
+        </div>
+
+        <p class="card-text"><small>{{api.description}}</small></p>
+
+        {{ api_buttons(api, edit_api_form, add_endpoint_form) }}
+    </div>
+</div>
+
+{% endmacro %}

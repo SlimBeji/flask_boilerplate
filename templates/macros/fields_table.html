@@ -1,0 +1,44 @@
+{% from "macros/field_buttons.html" import field_buttons %}
+
+{% macro fields_table(fields, edit_field_form) %}
+
+    <style>
+        @media screen and (max-width: 991px) {
+            .fields-table{
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+
+    <table class="table fields-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Required</th>
+                <th scope="col">Description</th>
+                <th scope="col">Default</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for field in fields %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ field.label }}</td>
+                    <td>{{ field.type }}</td>
+                    <td>{{ field.required }}</td>
+                    <td>{{ field.description }}</td>
+                    <td>{{ field.default }}</td>
+                    <td>
+                        {{ field_buttons(field, edit_field_form) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endmacro %}

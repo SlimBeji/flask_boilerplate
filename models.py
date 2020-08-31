@@ -52,7 +52,7 @@ class ApiItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(400), nullable=True)
-    url = db.Column(db.String(200), nullable=False)
+    url = db.Column(db.Text, nullable=False)
     endpoints = db.relationship('Endpoint', backref='api_item', lazy=True, cascade="all, delete-orphan")
     tags = db.relationship(
         'Tag', secondary=api_item_tag_table, lazy=True,
@@ -62,7 +62,7 @@ class ApiItem(db.Model):
 class Endpoint(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     api_item_id = db.Column(db.Integer, db.ForeignKey('api_item.id'), nullable=False)
-    url = db.Column(db.String(200), nullable=False)
+    url = db.Column(db.Text, nullable=False)
     label = db.Column(db.String(80), nullable=True)
     description = db.Column(db.String(400), nullable=True)
     fields = db.relationship(
@@ -77,7 +77,7 @@ class Endpoint(db.Model):
 class Field(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     endpoint_id = db.Column(db.Integer, db.ForeignKey('endpoint.id'), nullable=False)
-    name = db.Column(db.String(80), nullable=False)
+    label = db.Column(db.String(80), nullable=False)
     type = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(400), nullable=True)
     default = db.Column(db.String(200), nullable=True)

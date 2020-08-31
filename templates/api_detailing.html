@@ -1,0 +1,13 @@
+{% from "macros/api_item.html" import api_item %}
+{% from "macros/endpoints_list.html" import endpoints_list %}
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h5 class="card-title mt-3">API Quick View</h5>
+    {{ api_item(api, edit_api_form, add_endpoint_form) }}
+    <hr>
+    {{ endpoints_list(endpoints, edit_endpoint_form=edit_endpoint_form, add_field_form=add_field_form) }}
+	{{ pagination.links }}
+
+{% endblock %}

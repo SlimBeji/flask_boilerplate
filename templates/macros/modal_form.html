@@ -1,0 +1,24 @@
+{% from "macros/render_form.html" import render_form %}
+
+{% macro modal_form(html_id, button_text, button_color, head_text, form, action, data='') %}
+
+<a href="#" data-toggle="modal" data-target="#{{ html_id }}" class="btn btn-{{button_color}}">
+    <i class="fa fa-pencil"></i> {{button_text}}
+</a>
+<div class="modal fade" id="{{ html_id }}" tabindex="-1" role="dialog" aria-labelledby="modal-label-{{html_id}}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-label-{{html_id}}">{{head_text}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ render_form(form, action_url=action, action_text=button_text, data=data) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endmacro %}

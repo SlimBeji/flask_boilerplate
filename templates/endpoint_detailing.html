@@ -1,0 +1,12 @@
+{% from "macros/endpoint_item.html" import endpoint_item %}
+{% from "macros/fields_table.html" import fields_table %}
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h5 class="card-title mt-3">Endpoint Quick View</h5>
+    {{ endpoint_item(endpoint, edit_endpoint_form, add_field_form) }}
+    <hr>
+    <h5 class="card-title mt-3">List Fields</h5>
+    {{ fields_table(endpoint.fields_list, edit_field_form) }}
+{% endblock %}

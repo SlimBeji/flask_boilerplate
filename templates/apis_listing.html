@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% from "/macros/apis_list.html" import apis_list %}
+
+{% block content %}
+	{{ apis_list(apis, edit_api_form=edit_api_form, add_endpoint_form=add_endpoint_form) }}
+	{{ pagination.links }}
+{% endblock %}

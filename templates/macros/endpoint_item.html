@@ -1,0 +1,23 @@
+{% from "macros/endpoint_buttons.html" import endpoint_buttons %}
+
+{% macro endpoint_item(endpoint, edit_endpoint_form, add_field_form) %}
+
+<div class="card mb-2">
+    <div class="card-header">
+        {{endpoint.api_item.label}}: {{endpoint.label}}
+    </div>
+    <div class="card-body">
+        <div class="card-title d-inline">
+            <h6 class="d-inline mb-0">{{endpoint.api_item.url}}{{endpoint.url}} </h6>
+            {% for tag in endpoint.tags %}
+                <span class="badge badge-primary d-inline ml-1">{{tag}} </span>
+            {% endfor %}
+        </div>
+
+        <p class="card-text"><small>{{endpoint.description}}</small></p>
+
+        {{ endpoint_buttons(endpoint, edit_endpoint_form, add_field_form) }}
+    </div>
+</div>
+
+{% endmacro %}

@@ -2,10 +2,15 @@
 werkzeug==1.0.1
 flask==1.1.2
 flask-restx==0.2.0
+validators==0.18.0
 flask_sqlalchemy==2.4.3
 flask_migrate==2.5.3
+flask_paginate==0.7.0
+flask_marshmallow==0.13.0
+marshmallow_sqlalchemy==0.23.1
 flask_admin==1.5.6
 flask_wtf==0.14.3
+wtforms==2.3.3
 flask_security==3.0.0
 pytest==6.0.1
-pytest-mock==3.2.0
+pytest-mock==3.3.1

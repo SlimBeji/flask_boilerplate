@@ -34,9 +34,10 @@ def mock_crud(mocker):
 
 @pytest.fixture(scope="function")
 def context_tags(mock_crud):
-    tags_str = [generate_random_string() for _ in range(2)]
-    metatags = CRUD.addTags(tags_str, commit=False)
-    context = {'tags': metatags, 'tags_str': tags_str}
+    tags_list = [generate_random_string() for _ in range(2)]
+    tags = ' '.join(tags_list)
+    metatags = CRUD.addTags(tags, commit=False)
+    context = {'metatags': metatags, 'tags': tags}
     return context
 
 def test_adding_multiple_tags(mock_crud, context_tags):
@@ -49,7 +50,7 @@ def context_api(mock_crud, context_tags):
     label = generate_random_string()
     url = generate_random_string()
     description = ' '.join([generate_random_string() for _ in range(5)])
-    tags = context.get('tags_str')
+    tags = context.get('tags')
     api_id = CRUD.addApi(label, url, description=description, tags=tags, commit=False)
     context['api_id'] = api_id
     return context
@@ -67,10 +68,10 @@ def test_edit_api_by_id(mock_crud, context_api):
     label = generate_random_string()
     url = generate_random_string()
     description = ' '.join([generate_random_string() for _ in range(5)])
-    tags = [generate_random_string() for _ in range(5)]
+    tags = ' '.join([generate_random_string() for _ in range(5)])
     code = CRUD.editApi(
         id,
-        name=label,
+        label=label,
         url=url,
         description=description,
         tags=tags
@@ -80,11 +81,11 @@ def test_edit_api_by_id(mock_crud, context_api):
     assert api.label == label
     assert api.url == url
     assert api.description == description
-    assert set(tags) == set([t.text for t in api.tags])
+    assert set(tags.split()) == set([t.text for t in api.tags])
 
 def test_filter_apis_by_tags(mock_crud, context_api):
     print('\n=> Testing filtering apis by tags')
-    apis = CRUD.getApis(context_api.get('tags_str'))
+    apis = CRUD.getApis(context_api.get('tags'))
     assert apis
 
 @pytest.fixture(scope="function")
@@ -94,7 +95,7 @@ def context_endpoint(mock_crud, context_api):
     label = generate_random_string()
     url = generate_random_string()
     description = ' '.join([generate_random_string() for _ in range(5)])
-    tags = context.get('tags_str')
+    tags = context.get('tags')
     id = CRUD.addEndpoint(
         api_id,
         label,
@@ -116,10 +117,10 @@ def test_edit_endpoint_by_id(mock_crud, context_endpoint):
     label = generate_random_string()
     url = generate_random_string()
     description = ' '.join([generate_random_string() for _ in range(5)])
-    tags = [generate_random_string() for _ in range(5)]
+    tags = ' '.join([generate_random_string() for _ in range(5)])
     code = CRUD.editEndpoint(
         endpoint_id,
-        name=label,
+        label=label,
         url=url,
         description=description,
         tags=tags
@@ -129,7 +130,7 @@ def test_edit_endpoint_by_id(mock_crud, context_endpoint):
     assert endpoint.label == label
     assert endpoint.url == url
     assert endpoint.description == description
-    assert set(tags) == set([t.text for t in endpoint.tags])
+    assert set(tags.split()) == set([t.text for t in endpoint.tags])
 
 def test_delete_endpoint_by_id(mock_crud, context_endpoint):
     print('\n=> Testing deleting endpoint by id')
@@ -140,14 +141,14 @@ def test_delete_endpoint_by_id(mock_crud, context_endpoint):
 def context_field(mock_crud, context_endpoint):
     context = context_endpoint
     endpoint_id = context.get('endpoint_id')
-    name = generate_random_string()
+    label = generate_random_string()
     type_field = generate_random_string()
     description = ' '.join([generate_random_string() for _ in range(5)])
     default = generate_random_string()
     required = random.choice([True, False])
     id = CRUD.addEndpointField(
         endpoint_id,
-        name,
+        label,
         type_field,
         description=description,
         default=default,
@@ -164,14 +165,14 @@ def test_adding_field(mock_crud, context_field):
 def test_edit_field_by_id(mock_crud, context_field):
     print('\n=> Testing editing field by id')
     field_id = context_field.get('field_id')
-    name = generate_random_string()
+    label = generate_random_string()
     type_field = generate_random_string()
     description = ' '.join([generate_random_string() for _ in range(5)])
     default = generate_random_string()
     required = random.choice([True, False])
     code = CRUD.editField(
         field_id,
-        name=name,
+        label=label,
         type_field=type_field,
         description=description,
         default=default,
@@ -180,7 +181,7 @@ def test_edit_field_by_id(mock_crud, context_field):
     )
     assert code>0
     field = CRUD.getField(field_id)
-    assert field.name == name
+    assert field.label == label
     assert field.type == type_field
     assert field.description == description
     assert field.default == default

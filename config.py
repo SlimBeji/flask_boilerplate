@@ -23,3 +23,4 @@ class BaseConfig:
 class Globals:
     ACCEPTED_FIELD_TYPES = ['date', 'datetime', 'string', 'integer', 'boolean']
     ACCEPTED_FIELD_REQUIRED = ['yes', 'no']
+    ITEM_PER_PAGE = 20

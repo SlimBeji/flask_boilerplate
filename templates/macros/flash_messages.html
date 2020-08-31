@@ -1,6 +1,6 @@
 {% macro flash_messages() %}
 
-<div class="flash-messages mt-2">
+<div class="flash-messages mt-2 col-9 col-lg-10">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
             <div class="alert alert-{{ category }}" role="alert">

@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>My Dashboard</title>
 
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
     <link
         rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -60,13 +62,12 @@
                 {% endblock leftnav %}
             </div>
 
-            <div class="col-md-9 text-left">
+            <div class="col-md-9 col-lg-10 text-left">
                 {% block flash %}
                     {{ flash_messages() }}
                 {% endblock %}
 
                 {% block content %}
-                    Slim
                 {% endblock %}
             </div>
 

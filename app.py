@@ -1,11 +1,12 @@
-import logging
+import logging, os
 
-from flask import Flask, redirect, url_for, request
+from flask import Flask, redirect, url_for, request, send_from_directory, flash
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFError
 
 from extensions import csrf
 from models import db, security, user_datastore
+from schemas import ma
 from api import api
 from views import views
 from utils import list_obj_stringify
@@ -15,6 +16,7 @@ from config import BaseConfig
 app = Flask(__name__)
 app.config.from_object('config.BaseConfig')
 db.init_app(app)
+ma.init_app(app)
 security_state = security.init_app(app, user_datastore)
 security._state = security_state
 csrf.init_app(app)
@@ -27,8 +29,16 @@ to enable sqlite droping tables"""
 migrate = Migrate(app, db)
 
 #registering views and APIs
-api.init_app(app)
 app.register_blueprint(views)
+api.init_app(app)
+
+#Handling Faviocn requests
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'),
+        'favicon.ico', mimetype='image/vnd.microsoft.icon'
+    )
 
 #Creating a 404 template
 @app.errorhandler(404)

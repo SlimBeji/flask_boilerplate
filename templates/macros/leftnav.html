@@ -60,8 +60,12 @@
     .nav-side-menu li .sub-menu li:hover {
         background-color: #020203;
     }
-    .nav-side-menu ul .sub-menu li:before,
-    .nav-side-menu li .sub-menu li:before {
+    .nav-side-menu ul .sub-menu li a{
+        display: block;
+        width: 100%;
+    }
+    .nav-side-menu ul .sub-menu li a:before,
+    .nav-side-menu li .sub-menu li a:before {
         font-family: FontAwesome;
         content: "\f105";
         display: inline-block;
@@ -120,18 +124,18 @@
     <ul id="menu-content">
         <!-- APIs -->
         <li  data-toggle="collapse" data-target="#apis"
-             class="{{ 'active' if url_path.startswith('/apis') or url_endpoint=='views.index' }}"
+             class="{{ 'active' if url_path.startswith('/apis') or url_endpoint=='views.list_apis' }}"
         >
             <a href="#">
                 <i class="fa fa-gift fa-lg"></i> APIs <span class="d-sm-inline d-md-none d-lg-inline arrow"></span>
             </a>
         </li>
         <ul class="sub-menu collapse" id="apis">
-            <li>
-                <a href="#">List</a>
+            <li class="{{ 'active' if url_endpoint=='views.list_apis' }}">
+                <a href="{{ url_for('views.list_apis') }}">List</a>
             </li>
-            <li>
-                <a href="#">Add</a>
+            <li class="{{ 'active' if url_endpoint=='views.add_api' }}">
+                <a href="{{ url_for('views.add_api') }}">Add</a>
             </li>
         </ul>
 
@@ -142,11 +146,8 @@
             </a>
         </li>
         <ul class="sub-menu collapse" id="endpoints">
-            <li>
-                <a href="#">List</a>
-            </li>
-            <li>
-                <a href="#">Add</a>
+            <li class="{{ 'active' if url_endpoint=='views.list_endpoints' }}">
+                <a href="{{ url_for('views.list_endpoints') }}">List</a>
             </li>
         </ul>
 

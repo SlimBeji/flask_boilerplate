@@ -1,0 +1,16 @@
+{% from "macros/api_item.html" import api_item %}
+
+{% macro apis_list(apis, edit_api_form, add_endpoint_form) %}
+
+<h5 class="card-title mt-3">APIs List</h5>
+<div class="card-list mt-3">
+	{% if not apis|length %}
+		<h5 class="card-title mt-3">NA</h5>
+	{% endif %}
+
+	{% for api in apis %}
+		{{ api_item(api, edit_api_form, add_endpoint_form) }}
+	{% endfor %}
+</div>
+
+{% endmacro %}

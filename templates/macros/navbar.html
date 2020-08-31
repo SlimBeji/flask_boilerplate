@@ -42,11 +42,11 @@
     </div>
 
     <!-- Searchbar -->
-    <form class="form-inline col-4 col-sm-6 col-lg-8 my-0 pl-3" action="#" method="get" enctype="multipart/form-data">
+    <form class="form-inline col-4 col-sm-6 col-lg-8 my-0 pl-3" action="{{ url_for('views.search_by_tags') }}" method="get" enctype="multipart/form-data">
         <input maxlength="400" name="tags" class="form-control mr-sm-2 col-lg-11 col-md-10 col-9 d-sm-block d-none" type="search" placeholder="Search by tags" aria-label="Search">
         <button id="search-btn" class="btn btn-outline-dark mx-auto mx-sm-0" type="submit"><i class="fa fa-search"></i></button>
     </form>
-    <form id="search-form-secondary" class="form-inline w-100" action="#" method="get" enctype="multipart/form-data" style="display: none;">
+    <form id="search-form-secondary" class="form-inline w-100" action="{{ url_for('views.search_by_tags') }}" method="get" enctype="multipart/form-data" style="display: none;">
         <input maxlength="400" name="tags" class="form-control" type="search" placeholder="Search by tags" aria-label="Search">
         <button id="search-btn-secondary" class="btn btn-outline-dark" type="submit">GO!</button>
     </form>
@@ -95,7 +95,6 @@
     $(document).ready(function(){
         $("#search-btn").click(function(e){
             if ($(window).width() < 576){
-                console.log('executed here')
                 e.preventDefault();
                 $("#search-form-secondary").toggle();
             }
@@ -103,7 +102,6 @@
 
         $(document).mouseup(function(e){
             if ($(window).width() <576){
-                console.log('executed here too')
                 var container = $("#search-form-secondary");
                 var button = $("#search-btn");
                 if (!container.is(e.target) && container.has(e.target).length === 0 &&

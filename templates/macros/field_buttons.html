@@ -1,0 +1,29 @@
+{% from "macros/modal_form.html" import modal_form %}
+{% from "macros/delete_modal_form.html" import  delete_modal_form %}
+
+{% macro field_buttons(field, edit_field_form) %}
+
+    <style>
+        .field-buttons a{
+            font-size: 12px;
+        }
+    </style>
+
+     <div class="field-buttons">
+            <!-- Edit Field -->
+            {% set html_id="edit-field-"+field.id|string %}
+            {% set button_text="Edit" %}
+            {% set button_color="secondary" %}
+            {% set head_text="Field " + field.label %}
+            {% set action=url_for('views.edit_field', id=field.id) %}
+            {{ modal_form(html_id=html_id, button_text=button_text, button_color=button_color, head_text=head_text, form=edit_field_form, action=action, data=field) }}
+
+            <!-- Delete Field -->
+            {% set html_id="delete-field-"+field.id|string %}
+            {% set message="Do you want to delete Field " + field.label %}
+            {% set action=url_for('views.delete_field', id=field.id) %}
+            {% set head_text="Field " + field.label %}
+            {{ delete_modal_form(html_id=html_id, button_text="Delete", head_text=head_text, message=message, action=action )}}
+        </div>
+
+{% endmacro %}

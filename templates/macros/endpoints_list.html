@@ -1,0 +1,16 @@
+{% from "macros/endpoint_item.html" import endpoint_item %}
+
+{% macro endpoints_list(endpoints, edit_endpoint_form, add_field_form) %}
+
+<h5 class="card-title mt-3">Endpoints List:</h5>
+<div class="card-list mt-3">
+	{% if not endpoints|length %}
+		<h5 class="card-title mt-3">NA</h5>
+	{% endif %}
+
+	{% for endpoint in endpoints %}
+		{{ endpoint_item(endpoint, edit_endpoint_form=edit_endpoint_form, add_field_form=add_field_form) }}
+	{% endfor %}
+</div>
+
+{% endmacro %}

@@ -1,0 +1,45 @@
+{% from "macros/modal_form.html" import modal_form %}
+{% from "macros/delete_modal_form.html" import  delete_modal_form %}
+
+{% macro endpoint_buttons(endpoint, edit_endpoint_form, add_field_form) %}
+
+    {% set url_endpoint=request.url_rule.endpoint %}
+
+    <style>
+        .endpoint-buttons a{
+            font-size: 12px;
+        }
+    </style>
+
+     <div class="endpoint-buttons">
+            {% if url_endpoint!="views.detail_endpoint" %}
+                <a href="{{ url_for('views.detail_endpoint', id=endpoint.id) }}" class="btn btn-success">
+                    <i class="fa fa-list-ul"></i> Details
+                </a>
+            {% endif %}
+
+            <!-- Add Field -->
+            {% set html_id="add-field-to-endpoint-"+endpoint.id|string %}
+            {% set button_text="Add Field" %}
+            {% set button_color="info" %}
+            {% set head_text="Add Field to endpoint #" + endpoint.id|string + " " + endpoint.label %}
+            {% set action=url_for('views.add_field', id=endpoint.id) %}
+            {{ modal_form(html_id=html_id, button_text=button_text, button_color=button_color, head_text=head_text, form=add_field_form, action=action) }}
+
+            <!-- Edit Endpoint -->
+            {% set html_id="edit-endpoint-"+endpoint.id|string %}
+            {% set button_text="Edit Endpoint" %}
+            {% set button_color="secondary" %}
+            {% set head_text="#" + endpoint.id|string + " " + endpoint.label %}
+            {% set action=url_for('views.edit_endpoint', id=endpoint.id) %}
+            {{ modal_form(html_id=html_id, button_text=button_text, button_color=button_color, head_text=head_text, form=edit_endpoint_form, action=action, data=endpoint) }}
+
+            <!-- Delete Endpoint -->
+            {% set html_id="delete-endpoint-"+endpoint.id|string %}
+            {% set message="Do you want to delete Endpoint " + endpoint.url %}
+            {% set action=url_for('views.delete_endpoint', id=endpoint.id) %}
+            {% set head_text="#" + endpoint.id|string + " " + endpoint.label %}
+            {{ delete_modal_form(html_id=html_id, button_text="Delete", head_text=head_text, message=message, action=action )}}
+        </div>
+
+{% endmacro %}
